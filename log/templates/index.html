@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>1721 Battery Log</title>
+  </head>
+  <body>
+    {% if user.is_authenticated %} Hello, {{ user.username }}
+    <form
+      action="{% url 'logout' %}"
+      method="post"
+      style="display: inline-block"
+    >
+      {% csrf_token %}
+      <button type="submit">Log Out</button>
+    </form>
+    {% else %} You are not logged in
+    <a href="{% url 'login' %}"><button>Log In</button></a>
+    {% endif %}
+    <hr />
+
+    <form method="post">
+      {% csrf_token %} {{ form.as_table }}
+      <button type="submit">Log Entry</button>
+      {% if not user.is_authenticated %}
+      <span>Not logged in!</span>
+      {% endif %}
+    </form>
+    <hr />
+    <table>
+      <thead>
+        <th scope="col">DATE</th>
+        <th scope="col">USER</th>
+        <th scope="col">BATTERY</th>
+        <th scope="col">READY</th>
+        <th scope="col">CONDITION</th>
+        <th scope="col">CHARGE</th>
+        <th scope="col">RINT</th>
+        <th scope="col">MEMO</th>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+        <tr>
+          <td class="date">{{ entry.date }}</td>
+          <td class="user">{{ entry.user }}</td>
+          <td class="battery">{{ entry.battery }}</td>
+          <td class="ready">{{ entry.ready }}</td>
+          <td class="condition">{{ entry.get_condition_display }}</td>
+          <td class="charge">{{ entry.charge }}</td>
+          <td class="rint">{{ entry.rint }}</td>
+          <td class="memo">{{ entry.memo }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      td {
+        border: 1px solid gray;
+        padding: 8px 30px;
+      }
+    </style>
+    <script>
+      let conditions = document.getElementsByClassName("condition");
+      Array.from(conditions).forEach(function (condition) {
+        if (condition.innerText == "Good") {
+          condition.style.background = "lime";
+        } else if (condition.innerText == "Fair") {
+          condition.style.background = "yellow";
+        } else if (condition.innerText == "Poor") {
+          condition.style.background = "red";
+        } else {
+          condition.style.background = "gray";
+        }
+      });
+
+      let readyvalues = document.getElementsByClassName("ready");
+      Array.from(readyvalues).forEach(function (readyvalue) {
+        if (readyvalue.innerText == "True") {
+          readyvalue.style.background = "lime";
+        } else {
+          readyvalue.style.background = "red";
+        }
+      });
+
+      let charges = document.getElementsByClassName("charge");
+      Array.from(charges).forEach(function (charge) {
+        if (charge.innerText == -1) {
+          charge.style.background = "gray";
+        } else {
+          charge.style.background = "hsl(" + charge.innerText + " 100 50)";
+        }
+      });
+    </script>
+
+    {% if message %}
+    <script>
+      alert("{{ message }}");
+    </script>
+    {% endif %}
+  </body>
+</html>

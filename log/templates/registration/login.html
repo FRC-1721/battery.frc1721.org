@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>1721 Battery Log</title>
+  </head>
+  <body>
+    Enter your login information. Contact Dylan for a login.<br />
+    <hr />
+    <form method="post">
+      {% csrf_token %} {{ form.as_table }}
+      <button type="submit">Login</button>
+    </form>
+  </body>
+</html>
