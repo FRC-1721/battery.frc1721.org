@@ -30,11 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    "battery.frc1721.org",
-    "battery.frc1721.lan",
-    "10.242.17.33",  # Reverse proxy on vps (can we make this a catch*?)
-]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
