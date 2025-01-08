@@ -3,9 +3,10 @@ name: Build GHCR
 on:
   push:
     branches:
-      - "*"
+      - "main"
     tags:
       - "*"
+  pull_request:
 
 env:
   REGISTRY: ghcr.io
