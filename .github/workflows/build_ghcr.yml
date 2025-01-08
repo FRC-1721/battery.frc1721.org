@@ -29,7 +29,7 @@ jobs:
           submodules: true
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -55,7 +55,7 @@ jobs:
         run: |
           # Get lowercase repo and actor names
           REPO_NAME=$(echo "${{ github.repository }}" | awk -F'/' '{print tolower($2)}')
-          ACTOR_NAME=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
+          ACTOR_NAME=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
           BRANCH_NAME=$(echo "${{ steps.branch-name.outputs.current_branch }}" | sed 's/[^a-zA-Z0-9]/-/g; s/[A-Z]/\L&/g')
 
           # Build Docker tag
