@@ -16,7 +16,8 @@
     </form>
     {% else %} You are not logged in
     <a href="{% url 'login' %}"><button>Log In</button></a>
-    {% endif %}
+    {% endif %} {% if bad_key %} Security Token not found on server! Not
+    recommended to log in. {% endif %}
     <hr />
 
     <form method="post">

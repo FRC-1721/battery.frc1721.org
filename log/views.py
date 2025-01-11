@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Entry
 from .forms import EntryForm
+from battery.settings import BAD_KEY
 
 # Create your views here.
 
@@ -32,4 +33,4 @@ def index(request):
 
     entries = Entry.objects.all()
     form = EntryForm()
-    return render(request, 'index.html', {'entries': entries,"form": form})
+    return render(request, 'index.html', {'entries': entries, 'form': form, 'bad_key': BAD_KEY})
