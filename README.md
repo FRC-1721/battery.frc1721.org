@@ -1,3 +1,5 @@
+[![Build GHCR](https://github.com/FRC-1721/battery.frc1721.org/actions/workflows/build_ghcr.yml/badge.svg)](https://github.com/FRC-1721/battery.frc1721.org/actions/workflows/build_ghcr.yml)
+
 # battery.frc1721.org
 
 https://battery.frc1721.org/
