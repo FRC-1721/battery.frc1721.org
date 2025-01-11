@@ -1,6 +1,5 @@
 # App
 django
-python-dotenv
 
 # WSGI
 gunicorn
