@@ -5,7 +5,7 @@
     <title>1721 Battery Log</title>
   </head>
   <body>
-    {% if user.is_authenticated %} Hello, {{ user.username }}
+    {% if user.is_authenticated %} Hello, {{ user.first_name }}
     <form
       action="{% url 'logout' %}"
       method="post"
@@ -46,7 +46,7 @@
           <td class="user">{{ entry.user }}</td>
           <td class="battery">{{ entry.battery }}</td>
           <td class="ready">{{ entry.ready }}</td>
-          <td class="condition">{{ entry.get_condition_display }}</td>
+          <td class="condition">{{ entry.condition }}</td>
           <td class="charge">{{ entry.charge }}</td>
           <td class="rint">{{ entry.rint }}</td>
           <td class="memo">{{ entry.memo }}</td>
@@ -60,7 +60,7 @@
         border-collapse: collapse;
       }
       td {
-        border: 1px solid gray;
+        border: 1px solid black;
         padding: 8px 30px;
       }
     </style>
