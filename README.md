@@ -1,11 +1,11 @@
-=== battery.frc1721.org ===
+# battery.frc1721.org
 
 https://battery.frc1721.org/
 
 Django server to keep track of the state of batteries.
 Made by dublu.
 
------ TODO
+### TODO
 
 Sort and filter
 Make it look better
