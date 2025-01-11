@@ -85,5 +85,9 @@ target/
 __pycache__/
 local_settings.py
 
+# Dev
 .env
+
+# Dev DB
 db.sqlite3
+.local/

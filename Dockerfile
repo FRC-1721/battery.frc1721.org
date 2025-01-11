@@ -28,8 +28,12 @@ COPY . .
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
+# Bake in the git revision
+ARG GIT_COMMIT
+ENV GIT_COMMIT=$GIT_COMMIT
+
 # Expose port
 EXPOSE 8000
 
-# Run the Django app
-CMD ["./bin/entrypoint.sh"]
+# Entrypoint
+ENTRYPOINT "bin/entrypoint.sh"
