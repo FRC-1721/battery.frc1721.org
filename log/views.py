@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Entry
@@ -12,7 +12,13 @@ from django.contrib.auth.models import User
 
 def index(request):
     # Fetch unique battery names from the database
-    available_batteries = Entry.objects.values_list("battery", flat=True).distinct()
+    unique_entries = Entry.objects.order_by(
+        "battery", "-date"  # Order by battery, then most recent date
+    ).distinct(
+        "battery"  # Select one entry per unique battery
+    )
+
+    print(len(unique_entries))
 
     # When post...
     if request.method == "POST":
@@ -50,7 +56,7 @@ def index(request):
             or e.update({"memo": e["memo"] or ""})
             or e.update({"date": e["date"].strftime("%d %b, %Y %H:%M:%S")})
             or e,
-            map(lambda x: x.__dict__, Entry.objects.order_by("date").reverse()),
+            map(lambda x: x.__dict__, unique_entries),
         )
     )
 
@@ -62,6 +68,23 @@ def index(request):
             "entries": entries,
             "form": form,
             "bad_key": BAD_KEY,
-            "available_batteries": available_batteries,  # Pass to the template
+            "available_batteries": unique_entries,  # Pass to the template
         },
+    )
+
+
+def battery_detail(request, battery_id):
+    # Fetch and filter entries by battery_id
+    entries = Entry.objects.filter(battery=battery_id)
+
+    # 404 for non-existent entries
+    if not entries.exists():
+        return render(
+            request, "404.html", {"message": "Battery not found!"}, status=404
+        )
+
+    return render(
+        request,
+        "battery_detail.html",
+        {"battery_id": battery_id, "entries": entries},
     )

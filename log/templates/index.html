@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load static %}
+
 <head>
   <meta charset="UTF-8" />
   <title>1721 Battery Log</title>
+
+  <script src="{% static 'js/battery_format.js' %}"></script>
 </head>
 
 <body>
@@ -67,7 +71,9 @@
       <tr>
         <td class="date">{{ entry.date }}</td>
         <td class="user">{{ entry.user }}</td>
-        <td class="battery">{{ entry.battery }}</td>
+        <td class="battery">
+          <a href="{% url 'battery_detail' entry.battery %}">{{ entry.battery }}</a>
+        </td>
         <td class="ready">{{ entry.ready }}</td>
         <td class="condition">{{ entry.condition }}</td>
         <td class="charge">{{ entry.charge }}</td>
@@ -88,38 +94,6 @@
       padding: 8px 30px;
     }
   </style>
-  <script>
-    let conditions = document.getElementsByClassName("condition");
-    Array.from(conditions).forEach(function (condition) {
-      if (condition.innerText == "Good") {
-        condition.style.background = "lime";
-      } else if (condition.innerText == "Fair") {
-        condition.style.background = "yellow";
-      } else if (condition.innerText == "Poor") {
-        condition.style.background = "red";
-      } else {
-        condition.style.background = "gray";
-      }
-    });
-
-    let readyvalues = document.getElementsByClassName("ready");
-    Array.from(readyvalues).forEach(function (readyvalue) {
-      if (readyvalue.innerText == "True") {
-        readyvalue.style.background = "lime";
-      } else {
-        readyvalue.style.background = "red";
-      }
-    });
-
-    let charges = document.getElementsByClassName("charge");
-    Array.from(charges).forEach(function (charge) {
-      if (charge.innerText == -1) {
-        charge.style.background = "gray";
-      } else {
-        charge.style.background = "hsl(" + charge.innerText + " 100 50)";
-      }
-    });
-  </script>
 
   {% if message %}
   <script>
