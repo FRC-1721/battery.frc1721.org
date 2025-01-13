@@ -26,6 +26,11 @@
 </head>
 
 <body>
+    <a href="{% url 'battery_label' battery_id=battery_id %}">
+        <button>Print Label For This Battery</button>
+    </a>
+    <hr>
+
     <h1>Battery: {{ battery_id }}</h1>
     <table>
         <thead>

@@ -11,6 +11,7 @@ pillow = "*"
 dj-database-url = "*"
 psycopg2 = "*"
 gunicorn = "*"
+qrcode = "*"
 
 [dev-packages]
 

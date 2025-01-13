@@ -1,5 +1,11 @@
 from django.urls import path
-from log.views import IndexView, BatteryDetailView, GetCoverImageView, SubmitEntryView
+from log.views import (
+    IndexView,
+    BatteryDetailView,
+    GetCoverImageView,
+    SubmitEntryView,
+    BatteryLabelView,
+)
 
 urlpatterns = [
     path(
@@ -26,5 +32,10 @@ urlpatterns = [
         "submit/<str:battery_id>/",  # Optional mode with pre-populated battery_id
         SubmitEntryView.as_view(),
         name="submit_entry_with_id",
+    ),
+    path(
+        "label/<str:battery_id>/",
+        BatteryLabelView.as_view(),
+        name="battery_label",
     ),
 ]
