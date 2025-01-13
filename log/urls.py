@@ -1,5 +1,5 @@
 from django.urls import path
-from log.views import IndexView, BatteryDetailView, GetCoverImageView
+from log.views import IndexView, BatteryDetailView, GetCoverImageView, SubmitEntryView
 
 urlpatterns = [
     path(
@@ -16,5 +16,15 @@ urlpatterns = [
         "meta/getcoverimage/<str:battery_id>/",
         GetCoverImageView.as_view(),
         name="get_cover_image",
+    ),
+    path(
+        "submit/",
+        SubmitEntryView.as_view(),
+        name="submit_entry",
+    ),
+    path(
+        "submit/<str:battery_id>/",  # Optional mode with pre-populated battery_id
+        SubmitEntryView.as_view(),
+        name="submit_entry_with_id",
     ),
 ]

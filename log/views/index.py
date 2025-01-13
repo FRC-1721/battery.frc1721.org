@@ -35,7 +35,23 @@ class IndexView(ListView, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["bad_key"] = BAD_KEY
+
+        # Map the human-readable condition to each entry
+        entries_with_labels = []
+        for entry in context["entries"]:
+            entry_dict = {
+                "battery": entry.battery,
+                "ready": entry.ready,
+                "condition": entry.get_condition_display(),  # Get the human-readable label
+                "charge": entry.charge,
+                "rint": entry.rint,
+                "memo": entry.memo,
+                "user": entry.user,
+                "date": entry.date.strftime("%d %b, %Y %H:%M:%S"),
+            }
+            entries_with_labels.append(entry_dict)
+        context["entries"] = entries_with_labels
+
         return context
 
     def post(self, request, *args, **kwargs):
