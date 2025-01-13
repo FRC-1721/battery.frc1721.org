@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render, get_object_or_404
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect
@@ -68,7 +70,7 @@ def index(request):
             "entries": entries,
             "form": form,
             "bad_key": BAD_KEY,
-            "available_batteries": unique_entries,  # Pass to the template
+            "available_batteries": unique_entries,
         },
     )
 
@@ -86,5 +88,8 @@ def battery_detail(request, battery_id):
     return render(
         request,
         "battery_detail.html",
-        {"battery_id": battery_id, "entries": entries},
+        {
+            "battery_id": battery_id,
+            "entries": entries,
+        },
     )
