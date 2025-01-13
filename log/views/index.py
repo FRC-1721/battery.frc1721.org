@@ -3,7 +3,7 @@ import io
 import logging
 
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views import View
 from django.db import connection
 from django.views.generic import TemplateView, ListView, DetailView, FormView
@@ -55,4 +55,17 @@ class IndexView(ListView, FormView):
                 memo=data["memo"],
                 user=request.user.username,
             )
-        return HttpResponseRedirect("/")
+            return HttpResponseRedirect("/")  # Redirect only if form is valid
+        else:
+            logging.error("Form invalid: %s", form.errors)
+
+        # Re-render the page with the form and errors
+        return render(
+            request,
+            self.template_name,
+            {
+                "form": form,
+                "entries": self.get_queryset(),  # Pass entries to avoid breaking the template
+                "bad_key": False,  # Or whatever other context your template uses
+            },
+        )

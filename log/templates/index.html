@@ -47,6 +47,26 @@
       {% endif %}
       {% endfor %}
 
+      <!-- General (non-field-specific) errors -->
+      {% if form.non_field_errors %}
+      <ul class="error-list">
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <!-- Individual field errors -->
+      {% for field in form %}
+      {% if field.errors %}
+      <ul class="error-list">
+        {% for error in field.errors %}
+        <li>{{ field.label }}: {{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endfor %}
+
       <td colspan="2">
         <button type="submit">Log Entry</button>
       </td>
