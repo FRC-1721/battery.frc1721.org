@@ -5,6 +5,7 @@
 !battery/
 !bin/
 !log/
+!static/
 !manage.py
 !README.md
 !LICENSE

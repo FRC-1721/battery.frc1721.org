@@ -20,8 +20,6 @@ def index(request):
         "battery"  # Select one entry per unique battery
     )
 
-    print(len(unique_entries))
-
     # When post...
     if request.method == "POST":
         # Cant be not authenticated!
