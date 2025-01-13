@@ -5,6 +5,7 @@ import logging
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.views import View
+from django.db import connection
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 from log.models import Entry
 from log.forms import EntryForm
@@ -22,8 +23,15 @@ class IndexView(ListView, FormView):
     form_class = EntryForm
 
     def get_queryset(self):
-        # Fetch unique entries, ordered by battery and most recent date
-        return Entry.objects.order_by("battery", "-date").distinct("battery")
+        if connection.vendor == "sqlite":
+            # Workaround for SQLite (get latest for each battery manually)
+            logging.warning("Skipping using psql DISTINCT because detected sqlite")
+
+            batteries = Entry.objects.values_list("battery", flat=True).distinct()
+            return Entry.objects.filter(battery__in=batteries).order_by("-date")
+        else:
+            # PostgreSQL or compatible database with DISTINCT ON support
+            return Entry.objects.order_by("battery", "-date").distinct("battery")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
