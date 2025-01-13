@@ -1,6 +1,7 @@
 # App
 django
 whitenoise
+pillow
 
 # DB
 dj-database-url

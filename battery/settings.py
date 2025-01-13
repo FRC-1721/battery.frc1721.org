@@ -28,7 +28,7 @@ if SECRET_KEY == "asdf":
     BAD_KEY = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", False)
 
 ALLOWED_HOSTS = ["*"]
 

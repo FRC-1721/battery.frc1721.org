@@ -4,8 +4,14 @@
 {% load static %}
 
 <head>
-    <meta charset="UTF-8" />
     <title>Battery: {{ battery_id }}</title>
+    <meta charset="UTF-8" />
+
+    <meta property="og:title" content="Battery Details" />
+    <meta property="og:description" content="View details about a specific battery in the log." />
+    <meta property="og:image" content="{% url 'get_cover_image' battery_id %}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <script src="{% static 'js/battery_format.js' %}"></script>
 </head>
