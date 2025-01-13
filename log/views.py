@@ -11,13 +11,16 @@ from django.contrib.auth.models import User
 
 
 def index(request):
+    # Fetch unique battery names from the database
+    available_batteries = Entry.objects.values_list("battery", flat=True).distinct()
+
+    # When post...
     if request.method == "POST":
+        # Cant be not authenticated!
         if not request.user.is_authenticated:
             entries = Entry.objects.all()
             form = EntryForm()
             return HttpResponseRedirect("/")
-            # return render(request, 'index.html', {'entries': entries, 'form': form, 'message': 'USER NOT AUTHENTICATED. PLEASE LOG IN.'})
-
         form = EntryForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -31,7 +34,6 @@ def index(request):
                 user=request.user.username,
             )
             entry.save()
-
         return HttpResponseRedirect("/")
 
     entries = list(
@@ -54,5 +56,12 @@ def index(request):
 
     form = EntryForm()
     return render(
-        request, "index.html", {"entries": entries, "form": form, "bad_key": BAD_KEY}
+        request,
+        "index.html",
+        {
+            "entries": entries,
+            "form": form,
+            "bad_key": BAD_KEY,
+            "available_batteries": available_batteries,  # Pass to the template
+        },
     )
