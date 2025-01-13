@@ -1,21 +1,20 @@
 from django.urls import path
-from . import views
-
+from log.views import IndexView, BatteryDetailView, GetCoverImageView
 
 urlpatterns = [
     path(
         "",
-        views.index,
+        IndexView.as_view(),
         name="index",
     ),
     path(
         "battery/<str:battery_id>/",
-        views.battery_detail,
+        BatteryDetailView.as_view(),
         name="battery_detail",
     ),
     path(
         "meta/getcoverimage/<str:battery_id>/",
-        views.get_cover_image,
+        GetCoverImageView.as_view(),
         name="get_cover_image",
     ),
 ]
