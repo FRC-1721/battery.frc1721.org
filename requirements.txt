@@ -1,0 +1,11 @@
+# App
+django
+whitenoise
+pillow
+
+# DB
+dj-database-url
+psycopg2
+
+# WSGI
+gunicorn

@@ -1,0 +1,49 @@
+# Do not use for production!
+
+services:
+  db:
+    image: postgres:15
+    restart: "no"
+    environment:
+      - POSTGRES_USER=battery_user
+      - POSTGRES_PASSWORD=battery_password
+      - POSTGRES_DB=battery_db
+    healthcheck:
+      test:
+        ["CMD", "pg_isready", "-q", "-d", "battery_db", "-U", "battery_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - "5438:5432"
+    volumes:
+      - .local/data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: no
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: kenwood364@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: iamnotacrook
+    volumes:
+      - .local/pgadmin:/var/lib/pgadmin
+
+  battery_server:
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LOG_LEVEL: "DEBUG"
+      DATABASE_URL: postgres://battery_user:battery_password@db:5432/battery_db
+    restart: "no"
+    command: "true"

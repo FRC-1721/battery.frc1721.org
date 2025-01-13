@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <title>Battery: {{ battery_id }}</title>
+    <meta charset="UTF-8" />
+
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Battery {{ battery_id }}" />
+    <meta property="og:description" content="Status of battery {{ battery_id }}" />
+    <meta property="og:image" content="{% url 'get_cover_image' battery_id %}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://battery.frc1721.org/" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card tags for larger image display in discord only (lol, special) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Battery {{ battery_id }}" />
+    <meta name="twitter:description" content="Status of battery {{ battery_id }}" />
+    <meta name="twitter:image" content="{% url 'get_cover_image' battery_id %}" />
+
+    <script src="{% static 'js/battery_format.js' %}"></script>
+</head>
+
+<body>
+    <h1>Battery: {{ battery_id }}</h1>
+    <table>
+        <thead>
+            <th scope="col">DATE</th>
+            <th scope="col">USER</th>
+            <th scope="col">READY</th>
+            <th scope="col">CONDITION</th>
+            <th scope="col">CHARGE</th>
+            <th scope="col">RINT</th>
+            <th scope="col">MEMO</th>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td class="date">{{ entry.date }}</td>
+                <td class="user">{{ entry.user }}</td>
+                <td class="battery">{{ entry.battery }}</td>
+                <td class="ready">{{ entry.ready }}</td>
+                <td class="condition">{{ entry.condition }}</td>
+                <td class="charge">{{ entry.charge }}</td>
+                <td class="rint">{{ entry.rint }}</td>
+                <td class="memo">{{ entry.memo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 8px 30px;
+        }
+    </style>
+
+    {% if message %}
+    <script>
+        alert("{{ message }}");
+    </script>
+    {% endif %}
+
+    <a href="/">Back to index</a>
+
+    <footer>
+        <p>Version: {{ version }}</p>
+    </footer>
+</body>
+
+</html>
