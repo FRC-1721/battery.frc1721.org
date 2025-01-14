@@ -88,6 +88,10 @@ footer p {
   margin: 0;
 }
 
+footer a {
+  color: white;
+}
+
 /* Table Styles */
 table {
   width: 100%;

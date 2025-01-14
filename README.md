@@ -18,6 +18,14 @@ pipenv install
 pipenv shell
 ```
 
+It can be handy to place a `.env` at the root of this repo for connection details
+
+```
+DATABASE_URL=postgres://battery_user:battery_password@172.18.0.2:5432/battery_db
+DEBUG=true
+SECRET_KEY="fortestingonly"
+```
+
 Spawn a development django server
 
 ```shell
