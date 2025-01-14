@@ -2,14 +2,20 @@ import os
 import logging
 
 from django.views.generic import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from log.models import Entry
 from log.forms import EntryForm
 
 
-class SubmitEntryView(FormView):
+class SubmitEntryView(LoginRequiredMixin, FormView):
     form_class = EntryForm
     template_name = "submit_entry.html"
     success_url = "/"
+
+    # Redirect to login page if not authenticated
+    login_url = "/login/"
+    redirect_field_name = "next"
 
     def get_initial(self):
         # Pre-fill the battery field if 'battery_id' is in the URL

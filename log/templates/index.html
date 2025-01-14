@@ -11,19 +11,21 @@
 </head>
 
 <body>
-  {% if user.is_authenticated %} Hello, {{ user.first_name }}
+  {% if user.is_authenticated %}
+  Hello, {{ user.first_name }}
   <form action="{% url 'logout' %}" method="post" style="display: inline-block">
     {% csrf_token %}
     <button type="submit">Log Out</button>
   </form>
+  or
+  <a href="{% url 'submit_entry' %}"><button>Submit New Entry</button></a>
   {% else %} You are not logged in
-  <a href="{% url 'login' %}"><button>Log In</button></a>
+
+  Please <a href="{% url 'login' %}"><button>log in</button></a> to submit new entries.
   {% endif %}
 
   {% if bad_key %} Security Token not found on server! Not recommended to log in.
   {% endif %}
-  or
-  <a href="{% url 'submit_entry' %}"><button>Submit an Entry</button></a>
 
   <hr>
   <table>
