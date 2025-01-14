@@ -1,14 +1,24 @@
-from django.http import HttpResponse, Http404
-from django.views import View
-from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
 import os
 import qrcode
+
+from django.http import HttpResponse, Http404
+from django.views import View
+from django.utils.dateformat import DateFormat
+
+from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
+
 from datetime import datetime
 from log.models import Entry
 
 
 class BatteryLabelView(View):
+    def get_registration_date(self, battery_id):
+        # Fetch and format the oldest record for the battery as a date
+
+        first_entry = Entry.objects.filter(battery=battery_id).order_by("date").first()
+        return DateFormat(first_entry.date).format("F Y") if first_entry else "Unknown"
+
     def get(self, request, battery_id):
         # Check if the battery exists in the database
         if not Entry.objects.filter(battery=battery_id).exists():
@@ -47,17 +57,28 @@ class BatteryLabelView(View):
         draw.rectangle([0, 0, width, 160], fill=maroon_color)
         draw.text((30, -10), f"{battery_id}", font=title_font, fill="white")
 
+        # Add some cut trim around the edges
+        draw.line([0, 0, 0, height], fill=maroon_color, width=4)
+        draw.line([0, height, width, height], fill=maroon_color, width=6)
+        draw.line([width, height, width, 0], fill=maroon_color, width=6)
+
         # Add details: date and server version
-        date_generated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        date_generated = datetime.now().strftime("%m-%d-%Y")
         draw.text(
             (30, 160),
-            f"Generated: {date_generated}",
+            f"Registered: {self.get_registration_date(battery_id)}",
             font=subtitle_font,
             fill=text_color,
         )
         draw.text(
             (30, 220),
             f"Server: {git_commit}",
+            font=subtitle_font,
+            fill=text_color,
+        )
+        draw.text(
+            (30, 280),
+            f"Label Printed: {date_generated}",
             font=subtitle_font,
             fill=text_color,
         )
