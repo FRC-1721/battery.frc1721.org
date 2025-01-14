@@ -41,10 +41,10 @@ class Command(BaseCommand):
                     """,
                     [
                         battery_id,
-                        False,  # ready
-                        1,  # condition (Good)
-                        0.0,  # charge
-                        0.0,  # rint
+                        True,  # ready
+                        0,  # condition n/a
+                        100.0,  # charge
+                        25.0,  # rint
                         "System added entry for recordkeeping.",
                         "system",
                         date,
