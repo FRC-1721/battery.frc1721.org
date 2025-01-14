@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load static %}
+
 <head>
     <meta charset="UTF-8" />
     <title>Submit Entry</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
-    <h1>Submit New Battery Entry</h1>
+    <header>
+        <h1>Submit New Battery Entry</h1>
+        <nav>
+            {% if user.is_authenticated %} Hello, {{ user.first_name }}
+            <a href="{% url 'logout' %}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Log Out
+            </a>
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+            </form>
+            {% else %} You are not logged in
+            <a href="{% url 'login' %}"><button>Log In</button></a>
+            {% endif %}
 
-
-
-    {% if user.is_authenticated %} Hello, {{ user.first_name }}
-    <form action="{% url 'logout' %}" method="post" style="display: inline-block">
-        {% csrf_token %}
-        <button type="submit">Log Out</button>
-    </form>
-    {% else %} You are not logged in
-    <a href="{% url 'login' %}"><button>Log In</button></a>
-    {% endif %}
-
-    {% if bad_key %}
-    Security Token not found on server! Not recommended to log in.
-    {% endif %}
-    <hr />
+            {% if bad_key %}
+            Security Token not found on server! Not recommended to log in.
+            {% endif %}
+            <hr />
+        </nav>
+    </header>
 
     <form method="post">
         {% csrf_token %}

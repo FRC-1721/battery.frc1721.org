@@ -23,19 +23,24 @@
     <meta name="twitter:image" content="{% url 'get_cover_image' battery_id %}" />
 
     <script src="{% static 'js/battery_format.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
-    <a href="{% url 'battery_label' battery_id=battery_id %}">
-        <button>Print Label For This Battery</button>
-    </a>
-    or
-    <a href="{% url 'submit_entry' %}{{ battery_id}}">
-        <button>Record entry for {{ battery_id }}</button>
-    </a>
-    <hr>
+    <header>
+        <h1>Battery {{ battery_id }}</h1>
+        <nav>
+            <a href="{% url 'battery_label' battery_id=battery_id %}">
+                <button>Print Label For This Battery</button>
+            </a>
+            or
+            <a href="{% url 'submit_entry' %}{{ battery_id}}">
+                <button>Record entry for {{ battery_id }}</button>
+            </a>
+            <hr>
+        </nav>
+    </header>
 
-    <h1>Battery: {{ battery_id }}</h1>
     <table>
         <thead>
             <th scope="col">DATE</th>
