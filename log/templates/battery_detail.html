@@ -29,6 +29,10 @@
     <a href="{% url 'battery_label' battery_id=battery_id %}">
         <button>Print Label For This Battery</button>
     </a>
+    or
+    <a href="{% url 'submit_entry' %}{{ battery_id}}">
+        <button>Record entry for {{ battery_id }}</button>
+    </a>
     <hr>
 
     <h1>Battery: {{ battery_id }}</h1>
