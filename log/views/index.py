@@ -42,9 +42,13 @@ class IndexView(ListView, FormView):
                     battery_number=Cast(Substr("battery", 1, 2), IntegerField()),
                     battery_letter=Substr("battery", 3, 1),
                 )
-                .order_by("battery", "-battery_number", "battery_letter")
+                .order_by(
+                    "-battery",  # Required for DISTINCT ON
+                    "-date",  # Latest record for each battery
+                    "battery_number",
+                    "battery_letter",
+                )
                 .distinct("battery")
-                .reverse()
             )
 
     def get_context_data(self, **kwargs):
