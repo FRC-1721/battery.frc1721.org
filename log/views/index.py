@@ -6,6 +6,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views import View
 from django.db import connection
+from django.db.models import F, Value, IntegerField, CharField
+from django.db.models.functions import Cast, Substr
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 from log.models import Entry
 from log.forms import EntryForm
@@ -28,10 +30,22 @@ class IndexView(ListView, FormView):
             logging.warning("Skipping using psql DISTINCT because detected sqlite")
 
             batteries = Entry.objects.values_list("battery", flat=True).distinct()
-            return Entry.objects.filter(battery__in=batteries).order_by("-date")
+            return (
+                Entry.objects.filter(battery__in=batteries)
+                .order_by("battery")
+                .reverse()
+            )
         else:
-            # PostgreSQL or compatible database with DISTINCT ON support
-            return Entry.objects.order_by("battery", "-date").distinct("battery")
+            # PostgreSQL (use DISTINCT ON with custom sorting)
+            return (
+                Entry.objects.annotate(
+                    battery_number=Cast(Substr("battery", 1, 2), IntegerField()),
+                    battery_letter=Substr("battery", 3, 1),
+                )
+                .order_by("battery", "-battery_number", "battery_letter")
+                .distinct("battery")
+                .reverse()
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
