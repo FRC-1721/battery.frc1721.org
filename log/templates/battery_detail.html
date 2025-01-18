@@ -23,14 +23,29 @@
     <meta name="twitter:image" content="{% url 'get_cover_image' battery_id %}" />
 
     <script src="{% static 'js/battery_format.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
-    <h1>Battery: {{ battery_id }}</h1>
+    <header>
+        <h1>Battery {{ battery_id }}</h1>
+        <nav>
+            <a href="{% url 'battery_label' battery_id=battery_id %}">
+                <button>Print Label For This Battery</button>
+            </a>
+            or
+            <a href="{% url 'submit_entry' %}{{ battery_id}}">
+                <button>Record entry for {{ battery_id }}</button>
+            </a>
+            <hr>
+        </nav>
+    </header>
+
     <table>
         <thead>
             <th scope="col">DATE</th>
             <th scope="col">USER</th>
+            <th scope="col">BATTERY</th>
             <th scope="col">READY</th>
             <th scope="col">CONDITION</th>
             <th scope="col">CHARGE</th>
@@ -42,7 +57,9 @@
             <tr>
                 <td class="date">{{ entry.date }}</td>
                 <td class="user">{{ entry.user }}</td>
-                <td class="battery">{{ entry.battery }}</td>
+                <td class="battery">
+                    <a href="{% url 'battery_detail' entry.battery %}">{{ entry.battery }}</a>
+                </td>
                 <td class="ready">{{ entry.ready }}</td>
                 <td class="condition">{{ entry.condition }}</td>
                 <td class="charge">{{ entry.charge }}</td>
@@ -73,7 +90,7 @@
     <a href="/">Back to index</a>
 
     <footer>
-        <p>Version: {{ version }}</p>
+        <a href="https://github.com/FRC-1721/battery.frc1721.org">Version: {{ version }}</a>
     </footer>
 </body>
 

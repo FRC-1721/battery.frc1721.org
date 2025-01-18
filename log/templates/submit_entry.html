@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Submit Entry</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <header>
+        <h1>Submit New Battery Entry</h1>
+        <nav>
+            {% if user.is_authenticated %} Hello, {{ user.first_name }}
+            <a href="{% url 'logout' %}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Log Out
+            </a>
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+            </form>
+            {% else %} You are not logged in
+            <a href="{% url 'login' %}"><button>Log In</button></a>
+            {% endif %}
+
+            {% if bad_key %}
+            Security Token not found on server! Not recommended to log in.
+            {% endif %}
+            <hr />
+        </nav>
+    </header>
+
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <!-- Battery Field -->
+            <tr>
+                <td>
+                    <label for="battery">Battery:</label>
+                </td>
+                <td>
+                    <input list="batteries" id="battery" name="battery" value="{{ form.battery.value|default:'' }}"
+                        placeholder=" Enter or select a battery ID" />
+                    <datalist id="batteries">
+                        {% for battery in available_batteries %}
+                        <option value="{{ battery }}">
+                            {% endfor %}
+                    </datalist>
+                </td>
+            </tr>
+
+            <!-- Other Fields -->
+            {% for field in form %}
+            {% if field.name != "battery" %}
+            <tr>
+                <td>{{ field.label_tag }}</td>
+                <td>{{ field }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+            <!-- General (non-field-specific) errors -->
+            {% if form.non_field_errors %}
+            <ul class="error-list">
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <!-- Individual field errors -->
+            {% for field in form %}
+            {% if field.errors %}
+            <ul class="error-list">
+                {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endfor %}
+
+            <tr>
+                <td colspan="2">
+                    <button type="submit">Log Entry</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <hr />
+
+    {% if message %}
+    <script>
+        alert("{{ message }}");
+    </script>
+    {% endif %}
+
+    <p><a href="{% url 'index' %}">Back to Dashboard</a></p>
+
+    <footer>
+        <a href="https://github.com/FRC-1721/battery.frc1721.org">Version: {{ version }}</a>
+    </footer>
+</body>
+
+</html>

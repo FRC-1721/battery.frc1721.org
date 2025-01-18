@@ -8,53 +8,35 @@
   <meta charset="UTF-8" />
 
   <script src="{% static 'js/battery_format.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
-  {% if user.is_authenticated %} Hello, {{ user.first_name }}
-  <form action="{% url 'logout' %}" method="post" style="display: inline-block">
-    {% csrf_token %}
-    <button type="submit">Log Out</button>
-  </form>
-  {% else %} You are not logged in
-  <a href="{% url 'login' %}"><button>Log In</button></a>
-  {% endif %} {% if bad_key %} Security Token not found on server! Not
-  recommended to log in. {% endif %}
-  <hr />
-
-  <form method="post">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>
-          <label for="battery">Battery:</label>
-        </td>
-        <td>
-          <input list="batteries" id="battery" name="battery" placeholder="Enter or select a battery ID" />
-          <datalist id="batteries">
-            {% for battery in available_batteries %}
-            <option value="{{ battery }}">
-              {% endfor %}
-          </datalist>
-        </td>
-
-        {% for field in form %}
-        {% if field.name != "battery" %}
-      <tr>
-        <td>{{ field.label_tag }}</td>
-        <td>{{ field }}</td>
-      </tr>
+  <header>
+    <h1>1721 Battery Management</h1>
+    <nav>
+      {% if user.is_authenticated %}
+      <span>Hello, {{ user.first_name }}</span>
+      <a href="{% url 'submit_entry' %}">Submit New Entry</a>
+      <a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        Log Out
+      </a>
+      <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+      </form>
+      {% else %}
+      <span>You are not logged in.</span>
+      <a href="{% url 'login' %}">Log In</a>
       {% endif %}
-      {% endfor %}
+      {% if bad_key %}
+      <div style="color: red; font-weight: bold;">
+        Security Token not found on server! Not recommended to log in.
+      </div>
+      {% endif %}
+    </nav>
+  </header>
 
-      <td colspan="2">
-        <button type="submit">Log Entry</button>
-      </td>
-      </tr>
-    </table>
-  </form>
-
-  <hr />
+  <hr>
   <table>
     <thead>
       <th scope="col">DATE</th>
@@ -102,7 +84,7 @@
   {% endif %}
 
   <footer>
-    <p>Version: {{ version }}</p>
+    <a href="https://github.com/FRC-1721/battery.frc1721.org">Version: {{ version }}</a>
   </footer>
 </body>
 
